@@ -1,26 +1,45 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Photos from './Photos';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const BASE_URL = 'https://jsonplaceholder.typicode.com';
+const LIMIT = 5;
+
+class App extends React.Component {
+  state = {
+    photos: [],
+    pages: 10,
+    currentPage: 1,
+  }
+
+  componentDidMount() {
+    fetch(`${BASE_URL}/photos?_page=1&_limit=${LIMIT}`)
+      .then(res => res.json())
+      .then(res => this.setState({ photos: res }))
+  }
+
+  fetchMoreData = () => {
+    fetch(`${BASE_URL}/photos?_page=${this.state.currentPage + 1}&_limit=${LIMIT}`)
+      .then(res => res.json())
+      .then(res => {
+        this.setState({
+          photos: [...this.state.photos, ...res],
+          currentPage: this.state.currentPage + 1,
+        })
+      })
+  }
+
+  render() {
+    const { photos, pages, currentPage } = this.state;
+
+    return (
+      <Photos
+        fetchMoreData={this.fetchMoreData}
+        photos={photos}
+        pages={pages}
+        currentPage={currentPage}
+      />
+    )
+  }
 }
 
 export default App;
