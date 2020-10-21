@@ -1,5 +1,6 @@
-import React from "react";
-import InfiniteScroll from "react-infinite-scroll-component";
+import React from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import './Photos.css';
 
 const Photos = props => {
     const { photos, pages, currentPage } = props;
@@ -13,10 +14,10 @@ const Photos = props => {
                     hasMore={pages - currentPage !== 0}
                     loader={<h4>Loading...</h4>}
                 >
-                    <div className='flex'>
+                    <div className='gallery'>
                         {photos.map((photo, index) => (
-                            <div key={index}>
-                                <img id={photo.id} src={photo.url} alt='lorem ipsum' />
+                            <div className='image' key={index}>
+                                <img id={photo.id} src={photo.urls.thumb} alt='lorem ipsum' />
                             </div>
                         ))}
                     </div>

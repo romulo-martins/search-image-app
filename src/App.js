@@ -1,24 +1,35 @@
 import React from 'react';
 import Photos from './Photos';
+import 'dotenv'
 
-const BASE_URL = 'https://jsonplaceholder.typicode.com';
-const LIMIT = 5;
+const BASE_URL = 'https://api.unsplash.com';
+const access_token = process.env.REACT_APP_ACCESS_TOKEN;
 
 class App extends React.Component {
   state = {
     photos: [],
-    pages: 10,
+    pages: 20,
     currentPage: 1,
   }
 
   componentDidMount() {
-    fetch(`${BASE_URL}/photos?_page=1&_limit=${LIMIT}`)
+    fetch(`${BASE_URL}/photos?page=${this.state.currentPage + 1}&per_page=${this.state.pages}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Client-ID ${access_token}`
+      }
+    })
       .then(res => res.json())
       .then(res => this.setState({ photos: res }))
   }
 
   fetchMoreData = () => {
-    fetch(`${BASE_URL}/photos?_page=${this.state.currentPage + 1}&_limit=${LIMIT}`)
+    fetch(`${BASE_URL}/photos?page=${this.state.currentPage + 1}&per_page=${this.state.pages}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Client-ID ${access_token}`
+      }
+    })
       .then(res => res.json())
       .then(res => {
         this.setState({
