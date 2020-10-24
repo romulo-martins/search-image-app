@@ -12,32 +12,33 @@ class App extends React.Component {
     currentPage: 1,
   }
 
-  componentDidMount() {
+  fetchData = () => {
     fetch(`${BASE_URL}/photos?page=${this.state.currentPage + 1}&per_page=${this.state.pages}`, {
       method: 'GET',
       headers: {
         'Authorization': `Client-ID ${access_token}`
       }
     })
-      .then(res => res.json())
-      .then(res => this.setState({ photos: res }))
+    .then(response => response.json())
+    .then(response => {
+      const photos_url = response.map(r => ({
+          src: r.urls.regular,
+          width: 4,
+          height: 3,
+        })
+      )
+      
+      this.setState({
+        photos: [...this.state.photos, ...photos_url],
+        currentPage: this.state.currentPage + 1,
+      })
+    })
+    
   }
 
-  fetchMoreData = () => {
-    fetch(`${BASE_URL}/photos?page=${this.state.currentPage + 1}&per_page=${this.state.pages}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Client-ID ${access_token}`
-      }
-    })
-      .then(res => res.json())
-      .then(res => {
-        this.setState({
-          photos: [...this.state.photos, ...res],
-          currentPage: this.state.currentPage + 1,
-        })
-      })
-  }
+  componentDidMount() { this.fetchData() }
+
+  fetchMoreData = () => { this.fetchData() }
 
   render() {
     const { photos, pages, currentPage } = this.state;
