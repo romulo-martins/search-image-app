@@ -12,10 +12,8 @@ class App extends React.Component {
     term: '',
   }
 
-  fetchSearchData = (query = '', isFirstTime = false) => {
-    const initStatePhotos = { photos: [], currentPage: 0 }
-    const { photos, currentPage } = isFirstTime ? initStatePhotos : this.state;
-    const { pages } = this.state
+  fetchSearchData = (query = '') => {
+    const { photos, pages, currentPage } = this.state;
 
     const payload = {
       per_page: pages,
@@ -82,7 +80,11 @@ class App extends React.Component {
   }
 
   handleSearch = () => {
-    this.fetchSearchData(this.state.term, true)
+    this.setState({ 
+      photos: [], currentPage: 1 
+    }, () => {
+      this.fetchSearchData(this.state.term)
+    })
   }
 
   render() {
