@@ -1,5 +1,14 @@
 import React from 'react';
 import Photos from './Photos';
+import {
+  IconButton,
+  Container,
+  FormControl,
+  InputLabel,
+  Input,
+  InputAdornment,
+} from '@material-ui/core';
+import SearchIcon from '@material-ui/icons/Search';
 
 const BASE_URL = 'https://api.unsplash.com';
 const access_token = process.env.REACT_APP_ACCESS_TOKEN;
@@ -66,12 +75,12 @@ class App extends React.Component {
 
   componentDidMount() { this.fetchData() }
 
-  fetchMoreData = () => { 
+  fetchMoreData = () => {
     const { term } = this.state;
-    if(term.length > 0) {
+    if (term.length > 0) {
       this.fetchSearchData(term)
     } else {
-      this.fetchData() 
+      this.fetchData()
     }
   }
 
@@ -80,8 +89,8 @@ class App extends React.Component {
   }
 
   handleSearch = () => {
-    this.setState({ 
-      photos: [], currentPage: 1 
+    this.setState({
+      photos: [], currentPage: 1
     }, () => {
       this.fetchSearchData(this.state.term)
     })
@@ -91,23 +100,36 @@ class App extends React.Component {
     const { photos, pages, currentPage, term } = this.state;
 
     return (
-      <>
-        <div>
-          <input
-            placeholder='Search ...'
+      <Container>
+        <FormControl className=''>
+          <InputLabel>Search ...</InputLabel>
+          <Input
+            type='text'
             value={term}
             onChange={this.handleChange}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle search"
+                  onClick={this.handleSearch}
+                >
+                  <SearchIcon />
+                </IconButton>
+              </InputAdornment>
+            }
           />
-          <button onClick={this.handleSearch}>Buscar</button>
-        </div>
+        </FormControl>
 
+        <br />
+        <br />
+        
         <Photos
           fetchMoreData={this.fetchMoreData}
           photos={photos}
           pages={pages}
           currentPage={currentPage}
         />
-      </>
+      </ Container>
     )
   }
 }

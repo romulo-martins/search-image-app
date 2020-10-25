@@ -31,7 +31,7 @@ class ImageGallery extends Component {
     loadPhotosToGallery = () => {
         const { photos } = this.props;
         return (
-            photos.map(photo => ({ 
+            photos.map(photo => ({
                 src: photo.small,
                 height: 3,
                 width: 4,
@@ -55,7 +55,7 @@ class ImageGallery extends Component {
         const { currentImage, viewerIsOpen } = this.state;
 
         return (
-            <div>
+            <>
                 <Gallery
                     photos={this.loadPhotosToGallery()}
                     onClick={this.openLightbox} />
@@ -69,7 +69,7 @@ class ImageGallery extends Component {
                         </Modal>
                     )}
                 </ModalGateway>
-            </div>
+            </>
         );
     }
 }
