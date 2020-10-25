@@ -1,7 +1,8 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import ImageGallery from './ImageGallery';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import ImageGallery from './ImageGallery';
 
 
 const Photos = props => {
@@ -18,5 +19,10 @@ const Photos = props => {
         </InfiniteScroll>
     )
 }
+
+Photos.propTypes = {
+    photos: PropTypes.object,
+    fetchMoreData: PropTypes.func,
+};
 
 export default Photos;

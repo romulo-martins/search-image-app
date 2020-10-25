@@ -14,12 +14,15 @@ const BASE_URL = 'https://api.unsplash.com';
 const access_token = process.env.REACT_APP_ACCESS_TOKEN;
 
 class App extends React.Component {
-  state = {
-    photos: [],
-    pages: 20,
-    currentPage: 1,
-    term: '',
-  }
+  constructor(props) {
+    super(props);
+    this.state = {
+      photos: [],
+      pages: 20,
+      currentPage: 1,
+      term: '',
+    }
+}
 
   fetchSearchData = (query = '') => {
     const { photos, pages, currentPage } = this.state;

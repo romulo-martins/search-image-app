@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from 'prop-types';
 import Gallery from "react-photo-gallery";
 import Carousel, { Modal, ModalGateway } from "react-images";
 
@@ -13,8 +14,6 @@ class ImageGallery extends Component {
     }
 
     openLightbox = (_event, { index }) => {
-        console.log({ index })
-
         this.setState({
             currentImage: index,
             viewerIsOpen: true,
@@ -70,5 +69,9 @@ class ImageGallery extends Component {
         );
     }
 }
+
+ImageGallery.propTypes = {
+    photos: PropTypes.object,
+};
 
 export default ImageGallery;
