@@ -88,6 +88,12 @@ class App extends React.Component {
     this.setState({ term: event.target.value })
   }
 
+  handleKey = (event) => {
+    if(event.key === 'Enter') {
+      this.handleSearch()
+    }
+  }
+
   handleSearch = () => {
     this.setState({
       photos: [], currentPage: 1
@@ -107,6 +113,7 @@ class App extends React.Component {
             type='text'
             value={term}
             onChange={this.handleChange}
+            onKeyPress={this.handleKey}
             endAdornment={
               <InputAdornment position="end">
                 <IconButton
