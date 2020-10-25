@@ -39,10 +39,8 @@ class App extends React.Component {
     })
       .then(response => response.json())
       .then(response => {
-        const photo_urls = response.results.map(resp => resp.urls)
-
         this.setState({
-          photos: [...photos, ...photo_urls],
+          photos: [...photos, ...response.results],
           currentPage: currentPage + 1,
         })
       })
@@ -64,10 +62,8 @@ class App extends React.Component {
     })
       .then(response => response.json())
       .then(response => {
-        const photo_urls = response.map(resp => resp.urls)
-
         this.setState({
-          photos: [...photos, ...photo_urls],
+          photos: [...photos, ...response],
           currentPage: currentPage + 1,
         })
       })

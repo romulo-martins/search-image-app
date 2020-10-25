@@ -30,25 +30,22 @@ class ImageGallery extends Component {
 
     loadPhotosToGallery = () => {
         const { photos } = this.props;
-        return (
-            photos.map(photo => ({
-                src: photo.small,
-                height: 3,
-                width: 4,
-            }))
-        )
+        const photosToGallery = photos.map(photo => ({
+            src: photo.urls.small,
+            height: 3,
+            width: 4,
+        }))
+        return photosToGallery
     }
 
     loadPhotosToCarrosel = () => {
         const { photos } = this.props;
-        const photosToCarrosel = photos.map(photo => ({ src: photo.regular }))
-        return (
-            photosToCarrosel.map(photo => ({
-                ...photo,
-                srcset: photo.srcSet,
-                caption: photo.title
-            }))
-        )
+        const photosToCarrosel = photos.map(photo => ({
+            src: photo.urls.regular,
+            caption: photo.description,
+            alt: photo.alt_description,
+        }))
+        return photosToCarrosel
     }
 
     render() {
