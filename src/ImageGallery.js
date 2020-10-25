@@ -71,7 +71,7 @@ class ImageGallery extends Component {
 }
 
 ImageGallery.propTypes = {
-    photos: PropTypes.object,
+    photos: PropTypes.array,
 };
 
 export default ImageGallery;

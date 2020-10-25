@@ -21,7 +21,7 @@ const Photos = props => {
 }
 
 Photos.propTypes = {
-    photos: PropTypes.object,
+    photos: PropTypes.array,
     fetchMoreData: PropTypes.func,
 };
 
