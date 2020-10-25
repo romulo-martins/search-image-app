@@ -1,6 +1,5 @@
 import React from 'react';
 import Photos from './Photos';
-import 'dotenv'
 
 const BASE_URL = 'https://api.unsplash.com';
 const access_token = process.env.REACT_APP_ACCESS_TOKEN;
@@ -10,46 +9,103 @@ class App extends React.Component {
     photos: [],
     pages: 20,
     currentPage: 1,
+    term: '',
   }
 
-  fetchData = () => {
-    fetch(`${BASE_URL}/photos?page=${this.state.currentPage + 1}&per_page=${this.state.pages}`, {
+  fetchSearchData = (query = '', isFirstTime = false) => {
+    const initStatePhotos = { photos: [], currentPage: 0 }
+    const { photos, currentPage } = isFirstTime ? initStatePhotos : this.state;
+    const { pages } = this.state
+
+    const payload = {
+      per_page: pages,
+      page: currentPage + 1,
+      query: query
+    }
+    const params = new URLSearchParams(payload).toString();
+
+    fetch(`${BASE_URL}/search/photos?${params}`, {
       method: 'GET',
       headers: {
         'Authorization': `Client-ID ${access_token}`
-      }
+      },
     })
-    .then(response => response.json())
-    .then(response => {
-      const photos_url = response.map(r => ({
-          src: r.urls.regular,
-          width: 4,
-          height: 3,
+      .then(response => response.json())
+      .then(response => {
+        const photo_urls = response.results.map(resp => resp.urls)
+
+        this.setState({
+          photos: [...photos, ...photo_urls],
+          currentPage: currentPage + 1,
         })
-      )
-      
-      this.setState({
-        photos: [...this.state.photos, ...photos_url],
-        currentPage: this.state.currentPage + 1,
       })
+  }
+
+  fetchData = () => {
+    const { photos, pages, currentPage } = this.state;
+    const payload = {
+      per_page: pages,
+      page: currentPage + 1,
+    }
+    const params = new URLSearchParams(payload).toString();
+
+    fetch(`${BASE_URL}/photos?${params}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Client-ID ${access_token}`
+      },
     })
-    
+      .then(response => response.json())
+      .then(response => {
+        const photo_urls = response.map(resp => resp.urls)
+
+        this.setState({
+          photos: [...photos, ...photo_urls],
+          currentPage: currentPage + 1,
+        })
+      })
   }
 
   componentDidMount() { this.fetchData() }
 
-  fetchMoreData = () => { this.fetchData() }
+  fetchMoreData = () => { 
+    const { term } = this.state;
+    if(term.length > 0) {
+      this.fetchSearchData(term)
+    } else {
+      this.fetchData() 
+    }
+  }
+
+  handleChange = (event) => {
+    this.setState({ term: event.target.value })
+  }
+
+  handleSearch = () => {
+    this.fetchSearchData(this.state.term, true)
+  }
 
   render() {
-    const { photos, pages, currentPage } = this.state;
+    const { photos, pages, currentPage, term } = this.state;
 
     return (
-      <Photos
-        fetchMoreData={this.fetchMoreData}
-        photos={photos}
-        pages={pages}
-        currentPage={currentPage}
-      />
+      <>
+        <div>
+          <input
+            placeholder='Search ...'
+            value={term}
+            onChange={this.handleChange}
+          />
+          <button onClick={this.handleSearch}>Buscar</button>
+        </div>
+
+        <Photos
+          fetchMoreData={this.fetchMoreData}
+          photos={photos}
+          pages={pages}
+          currentPage={currentPage}
+        />
+      </>
     )
   }
 }

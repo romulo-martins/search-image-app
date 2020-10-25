@@ -4,21 +4,21 @@ import ImageGallery from './ImageGallery';
 
 
 const Photos = props => {
-    const { photos, pages, currentPage } = props;
+    const { photos, fetchMoreData } = props;
 
     return (
-        <div>
+        <>
             {photos &&
                 <InfiniteScroll
                     dataLength={photos.length}
-                    next={props.fetchMoreData}
-                    hasMore={pages - currentPage !== 0}
+                    next={fetchMoreData}
+                    hasMore
                     loader={<h4>Loading...</h4>}
                 >
-                    <ImageGallery photos={photos} />;
+                    <ImageGallery photos={photos} />
                 </InfiniteScroll>
             }
-        </div>
+        </>
     )
 }
 

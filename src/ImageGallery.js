@@ -12,7 +12,7 @@ class ImageGallery extends Component {
         };
     }
 
-    openLightbox = (_event, { _photo, index }) => {
+    openLightbox = (_event, { index }) => {
         console.log({ index })
 
         this.setState({
@@ -28,23 +28,43 @@ class ImageGallery extends Component {
         })
     };
 
-    render() {
+    loadPhotosToGallery = () => {
         const { photos } = this.props;
+        return (
+            photos.map(photo => ({ 
+                src: photo.small,
+                height: 3,
+                width: 4,
+            }))
+        )
+    }
+
+    loadPhotosToCarrosel = () => {
+        const { photos } = this.props;
+        const photosToCarrosel = photos.map(photo => ({ src: photo.regular }))
+        return (
+            photosToCarrosel.map(photo => ({
+                ...photo,
+                srcset: photo.srcSet,
+                caption: photo.title
+            }))
+        )
+    }
+
+    render() {
         const { currentImage, viewerIsOpen } = this.state;
 
         return (
             <div>
-                <Gallery photos={photos} onClick={this.openLightbox} />
+                <Gallery
+                    photos={this.loadPhotosToGallery()}
+                    onClick={this.openLightbox} />
                 <ModalGateway>
                     {viewerIsOpen && (
                         <Modal onClose={this.closeLightbox}>
                             <Carousel
                                 currentIndex={currentImage}
-                                views={photos.map(x => ({
-                                    ...x,
-                                    srcset: x.srcSet,
-                                    caption: x.title
-                                }))}
+                                views={this.loadPhotosToCarrosel()}
                             />
                         </Modal>
                     )}
